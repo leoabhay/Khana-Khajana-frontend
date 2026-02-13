@@ -9,22 +9,22 @@ const Recipes = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        setLoading(true);
+        const response = await recipeService.getRecipes(searchedQuery);
+        if (response.data && response.data.recipes) {
+          setRecipes(response.data.recipes);
+        }
+      } catch (error) {
+        console.error("Failed to fetch recipes", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchRecipes();
   }, [searchedQuery]);
-
-  const fetchRecipes = async () => {
-    try {
-      setLoading(true);
-      const response = await recipeService.getRecipes(searchedQuery);
-      if (response.data && response.data.recipes) {
-        setRecipes(response.data.recipes);
-      }
-    } catch (error) {
-      console.error("Failed to fetch recipes", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="bg-[#fdfcfb] min-h-screen">
